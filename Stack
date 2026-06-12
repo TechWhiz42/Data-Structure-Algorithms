@@ -1,1 +1,96 @@
+A stack is an abstract data structure that holds elements in a sequence using the Last-In-First-Out (LIFO) or First-In-Last-Out(FILO) principle.
+It is famously used for solving the mathematical expressions like (1+2*3) as we need to keep in mind the operator precedence which is that "-/+" holds same precedence but it precedence is lower than "* / /" which are same precedence level.
+It is also used for problems like parantheses problems. The code below solves that very problem in C++.
 
+<------------------------------------------->
+void parenthesisProblem(string str) {
+    stack<char> s;
+
+    for (char c : str) {
+
+        if (c == '(' || c == '{' || c == '[') {
+            s.push(c);
+        }
+        else {
+            if (s.empty()) {
+                cout << "Parentheses are not valid\n";
+                return;
+            }
+
+            char top = s.top();
+            s.pop();
+
+            if ((c == ')' && top != '(') ||
+                (c == '}' && top != '{') ||
+                (c == ']' && top != '[')) {
+                cout << "Parentheses are not valid\n";
+                return;
+                }
+        }
+    }
+
+
+
+    if (s.empty())
+        cout << "Parentheses are valid\n";
+    else
+        cout << "Parentheses are not valid\n";
+}
+<-------------------------------------------------->
+
+Also for the code for the code for the expression evaluation
+
+<--------------------------------------------------->
+
+//This function solves the precedence problem and solves the operator which has higher precedence first.
+int precedence(char op) {
+    if (op == '+' || op == '-')
+        return 1;
+    if (op == '*' || op == '/')
+        return 2;
+    return 0;
+}
+
+//This function basically read the operator and then decide what operation to perform and push in the stack.
+void apply(stack<int>& values, stack<char>& ops) {
+    int b = values.top();
+    values.pop();
+
+    int a = values.top();
+    values.pop();
+
+    char op = ops.top();
+    ops.pop();
+
+    switch(op) {
+        case '+': values.push(a + b); break;
+        case '-': values.push(a - b); break;
+        case '*': values.push(a * b); break;
+        case '/': values.push(a / b); break;
+    }
+}
+
+//This function read the fucntion and pushes the values and operations in two different stacks. It also initiates the solving of the expression.
+int evaluateExpression( string str ) {
+    stack<int> values;
+    stack<char> ops;
+
+    for ( char c : str) {
+        if (isdigit(c)) {
+            values.push(c - '0');
+        }
+        else {
+            while (!ops.empty() &&
+                precedence(ops.top()) >= precedence(c)) {
+                apply(values, ops);
+            }
+            ops.push(c);
+        }
+    }
+
+    while (!ops.empty()) {
+        apply(values, ops);
+    }
+
+    return values.top();
+}
