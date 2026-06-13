@@ -1,0 +1,65 @@
+Queue is a linear data structure that works on the princicle of First-In-Fist-Out(FIFO). It is like sequential processing where first come first serve applies perfectly.
+The operations which you can perform on a queue are :-
+-> Enqueue: Adding an element into the data structure. We must make sure that the queue is not full by checking if the rear pointer is at the last element of the queue or it will cause queue overflow
+-> Dequeue: Removes and return the element at the front of the queue. Make sure the queue is not empty (by checking whether both front and rear are not pointing to any element of queue (-1) or it will cause undeflow
+-> Peek / Front: Returns the value of the front element.
+
+A circular is one where when the rear pointer is at the last element of the queue and taking one step forward moves it to front pointer. front=rear=0;
+//Implementing circular queue with also all the operations mentioned above
+<----------------------------------------------->
+class CircularQueue {
+private:
+    int *arr;
+    int front, rear;
+    int capacity;
+
+public:
+    CircularQueue( int size ) {
+        capacity = size;
+        arr = new int[capacity];
+        front = rear = -1;
+    }
+    ~CircularQueue() {
+        delete[] arr;
+    }
+
+    bool isEmpty() {
+        return front == -1;
+    }
+
+    bool isFull() {
+        return ( rear + 1) % capacity == front;
+    }
+
+    void enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue is full" << endl;
+            return;
+        }
+
+        if ( isEmpty() ) {
+            front = rear = 0;
+        } else {
+            rear = (rear + 1) % capacity;
+        }
+
+        arr[rear] = value;
+        cout << "Enqueued " << value << " at position " << rear << endl;
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue underflows\n" << endl;
+            return;
+        }
+
+        cout << arr[front] << " removed\n";
+
+        if (front == rear) {
+            front = rear = -1;
+        } else {
+            front = (front + 1) % capacity;
+        }
+    }
+};
+<----------------------------------------------------->
