@@ -1,0 +1,45 @@
+Binary search is a serchiing method used to search for a specific element known as target in an already sorted array.
+The algorithm which binary search follows is as follows :-
+->Sort the array if not already.
+->initialise 2 variable-
+    >int left = 0;
+    >int right = (size of array)-1;
+->Then we find the mid point index of the array by using a simple mathematical formula -
+    >int mid = left + ( right-left )/2;
+->Now we check if the given target is equal to the mid point index value or not,
+    >if yes, mid index is returned and the execution is complete.
+    >if no,
+      >we check if the value if target is > or < the mid index value.
+        >if > then we check the right half of the array (left = mid + 1)
+        >if < then we check the left half of the array (right = mid - 1)
+->Then we keep on dividing the halves into more halves and repeat the same process untill we reach the target.
+->The time omplexity of this search methond is O(log n).
+
+-> The function of the binary search is given below - 
+<----------------------------------------------->
+int binarySearch(vector<int>& a, int key) {
+    sort(a.begin(), a.end());
+    int left = 0, right = a.size() - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (a[mid] == key)
+            return mid;
+
+        if (a[mid] < key)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    return -1;
+}
+<-------------------------------------------------->
+
+-> In C++ STL there are certain algorith which enhances the use of binary search in some specific problems.
+->1. lower_bound() = It is used to find the first element in a sorted range that is <u>greater than or equal</u> to a given value.
+->2. upper_bound() = It is used to find the first element in a sorted range which is <u>strictly greater than</u> a given value.
+
+->Also learned about the Search Space problems where we basically find the correct answer by searching among many possibilites.
+->For example, guessing a number which I chose. We can use binary search to divide array in half repeatedly and find asnwer.
+-> Some famous problem on this topic are the koko bananae ating problem and maximum days to deliver a prodduct based on there weights.
