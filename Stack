@@ -71,6 +71,7 @@ void apply(stack<int>& values, stack<char>& ops) {
 }
 
 //This function read the fucntion and pushes the values and operations in two different stacks. It also initiates the solving of the expression.
+<--------------------------------------------------------->
 int evaluateExpression( string str ) {
     stack<int> values;
     stack<char> ops;
@@ -94,3 +95,136 @@ int evaluateExpression( string str ) {
 
     return values.top();
 }
+<--------------------------------------------------------->
+
+->Stack is also used in tree traversal. It is used to implement the iterative Preorder, postorder and inorder.
+In iterative preoder (Data Left Right)
+->we initialise a stack which stores the pointer the Tree Node.
+->push the root into the stack.
+->create a pointer pointing to the top of the stack and pop the top() and print.
+->we check for the right child, if present we push it and then we push the left child if available.
+->Repeat the process again.
+<---------------------------------------------->
+void iterativePreorder(TreeNode* root) {
+    if ( root == NULL) return;
+
+    stack<TreeNode*> st;
+
+    st.push(root);
+
+
+    while (!st.empty()) {
+        TreeNode* current = st.top();
+        st.pop();
+
+        cout << current->data << endl;
+
+        if (current->right)
+            st.push(current->right);
+
+        if (current->left)
+            st.push(current->left);
+    }
+}
+<-------------------------------------------------->
+
+In iterative Inorder-
+->we initialse stack, curret and also a dynamic array ans.
+->while current is true and stack is not empty we push the root node into the stack.
+->Then we move to the very left of the tree.
+->Here the pointer current is on the top of the stack and we pop it.
+->We push the data of the current pointer into the ans array.
+-> After that we move right of the node and repeat the process.
+->return ans;
+<---------------------------------------------------->
+vector<int> iterativeInorder(TreeNode* root) {
+    vector<int> ans;
+    stack<TreeNode*> st;
+    TreeNode* curr = root;
+
+    while ( curr || !st.empty()) {
+        while (curr) {
+            st.push(curr);
+            curr = curr->left;
+        }
+        curr = st.top();
+        st.pop();
+
+        cout << curr->data << endl;
+
+        ans.push_back(curr->data);
+        curr = curr->right;
+    }
+    return ans;
+}
+<----------------------------------------------------->
+In Iterative Postorder-
+->We use two stacka and also one stack method.
+->in iterative postorder you process the data after both its left and right subtree are completely done.
+->So we use one stack to process the nodes in (Data -> Right -> Left) and stored in stack 1.
+->Then we reverse the stack and store it into stack 2.
+<----------------------------------------------------->
+vector<int> iterativePostorder(TreeNode* root) {
+    vector<int> ans;
+
+    if (!root) return ans;
+
+    stack<TreeNode*> s1, s2;
+
+    s1.push(root);
+    while (!s1.empty()) {
+        TreeNode* node = s1.top();
+        s1.pop();
+        s2.push(node);
+
+        if (node-> left)
+            s1.push(node->left);
+
+        if (node -> right)
+            s1.push(node -> right);
+    }
+
+    while (!s2.empty()) {
+        ans.push_back(s2.top()->data);
+        s2.pop();
+
+    }
+    return ans;
+}
+<--------------------------------------------------->
+In one stack post order traversal we use the the lastVisited variable-
+->First sre the usual steps initialising stack, current, and also lastVisited variable.
+->We pusht the root into the stack and move to the very left of the tree and process them.
+->The node we process we mark it as lastVisted = node.
+->If after process we check the lastVisited is on left subtree and node->right is there. It means that rigt needs to be processed and the currene moves to node->right.
+->The data is stored in ans array and top is popped one by one.
+->Once the lastVisited moves to right the process is complete
+
+<--------------------------------------------------->
+vector<int> iterativePostorder1(TreeNode* root) {
+    vector<int> ans;
+    stack<TreeNode*> st;
+    if (root == NULL) return ans;
+
+    TreeNode* curr = root;
+    TreeNode* lastVisited = nullptr;
+
+    while (curr || !st.empty()) {
+        if (curr) {
+            st.push(root);
+            curr = curr->left;
+        } else {
+            TreeNode* node = st.top();
+
+            if (node->right && lastVisited != node->right) {
+                curr = node -> right;
+            } else {
+                ans.push_back(node->data);
+                lastVisited = node;
+                st.pop();
+            }
+        }
+    }
+    return ans;
+}
+<--------------------------------------------------->
